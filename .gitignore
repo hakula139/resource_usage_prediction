@@ -1,3 +1,10 @@
+## Customized
+
+.vscode/
+bin/
+build/
+
+
 ## Cpp
 
 # Prerequisites
