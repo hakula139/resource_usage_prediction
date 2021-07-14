@@ -11,4 +11,14 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin")
 
 find_package(Torch REQUIRED)
 
+# Parameters
+set(CONFIG_MAX_SIZE 500)
+set(CONFIG_HIDDEN_SIZE 50)
+set(CONFIG_SEQ_LEN 5)
+set(CONFIG_N_LAYERS 2)
+set(CONFIG_DROPOUT 0.2)
+set(CONFIG_LEARNING_RATE 5e-3)
+
+configure_file("config.hpp.in" "${CMAKE_CURRENT_SOURCE_DIR}/src/common/config.hpp")
+
 add_subdirectory(src)

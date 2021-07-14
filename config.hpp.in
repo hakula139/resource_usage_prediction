@@ -1,0 +1,17 @@
+#ifndef SRC_COMMON_CONFIG_HPP_
+#define SRC_COMMON_CONFIG_HPP_
+
+#include <cstdint>
+
+// clang-format off
+
+constexpr int64_t MAX_SIZE = @CONFIG_MAX_SIZE@;
+constexpr int64_t HIDDEN_SIZE = @CONFIG_HIDDEN_SIZE@;
+constexpr int64_t SEQ_LEN = @CONFIG_SEQ_LEN@;
+constexpr int64_t N_LAYERS = @CONFIG_N_LAYERS@;
+constexpr double DROPOUT = @CONFIG_DROPOUT@;
+constexpr double LEARNING_RATE = @CONFIG_LEARNING_RATE@;
+
+// clang-format on
+
+#endif  // SRC_COMMON_CONFIG_HPP_

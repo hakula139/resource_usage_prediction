@@ -1,5 +1,5 @@
-#ifndef SRC_MODEL_MODEL_HPP_
-#define SRC_MODEL_MODEL_HPP_
+#ifndef SRC_PREDICTOR_MODEL_HPP_
+#define SRC_PREDICTOR_MODEL_HPP_
 
 #include <torch/torch.h>
 
@@ -30,4 +30,4 @@ class GruNet : public torch::nn::Module {
   torch::nn::ReLU relu_;
 };
 
-#endif  // SRC_MODEL_MODEL_HPP_
+#endif  // SRC_PREDICTOR_MODEL_HPP_
