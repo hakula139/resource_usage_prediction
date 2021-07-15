@@ -14,7 +14,6 @@ int main() {
 
   while (true) {
     int64_t cur_data;
-    std::cout << "\rInput: ";
     std::cin >> cur_data;
     if (cur_data < 0) break;
     dataset.push_back(cur_data);
@@ -25,10 +24,10 @@ int main() {
       auto input = data.slice(0, 0, BATCH_SIZE);
       auto expected = data.slice(0, BATCH_SIZE, BATCH_SIZE + OUTPUT_SIZE);
       auto loss = predictor.Train(input, expected);
-      std::cout << "Current loss: " << loss << "\n";
+      std::cout << "Loss: " << loss << "\n";
 
       input = data.slice(0, OUTPUT_SIZE, BATCH_SIZE + OUTPUT_SIZE);
-      auto prediction = predictor.Predict(input);
+      auto prediction = predictor.Predict(input)[0].item<int64_t>();
       std::cout << "Prediction: " << prediction << "\n";
 
       dataset.erase(dataset.begin());

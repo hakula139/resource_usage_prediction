@@ -23,7 +23,6 @@ class GruNet : public torch::nn::Module {
 
   torch::nn::GRU gru_;
   torch::nn::Linear fc_;
-  torch::nn::ReLU relu_;
 
   torch::Tensor hidden_;
 };

@@ -20,11 +20,9 @@ GruNet::GruNet(
                .num_layers(n_layers)
                .batch_first(true)
                .dropout(dropout)),
-      fc_(nn::LinearOptions(hidden_size, output_size)),
-      relu_() {
+      fc_(nn::LinearOptions(hidden_size, output_size)) {
   register_module("gru", gru_);
   register_module("fc", fc_);
-  register_module("relu", relu_);
 }
 
 Tensor GruNet::Forward(Tensor input) {
