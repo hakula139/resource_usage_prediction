@@ -1,5 +1,6 @@
 #include <torch/torch.h>
 
+#include <fstream>
 #include <iostream>
 #include <vector>
 
@@ -9,6 +10,7 @@
 int main() {
   std::vector<int64_t> dataset;
   Predictor predictor;
+  std::ofstream output(OUTPUT_PATH);
 
   std::cout << "Server started.\n";
 
@@ -28,9 +30,12 @@ int main() {
       input = data.slice(0, OUTPUT_SIZE, BATCH_SIZE + OUTPUT_SIZE);
       auto prediction = predictor.Predict(input)[0].item<int64_t>();
       prediction = prediction > 0 ? prediction : 0;
-      std::cout << "Prediction: " << prediction << " | Loss: " << loss << "\n";
+      std::cout << "> " << prediction << " | Loss: " << loss << "\n";
+      output << prediction << " ";
 
       dataset.erase(dataset.begin());
     }
   }
+
+  output.close();
 }

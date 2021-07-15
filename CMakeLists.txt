@@ -6,8 +6,8 @@ project(resource_usage_prediction VERSION 0.1)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_BUILD_TYPE "Debug")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${TORCH_CXX_FLAGS}")
-set(CMAKE_PREFIX_PATH "${CMAKE_CURRENT_SOURCE_DIR}/lib/libtorch")
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin")
+set(CMAKE_PREFIX_PATH "${CMAKE_SOURCE_DIR}/lib/libtorch")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin")
 
 find_package(Torch REQUIRED)
 
@@ -20,7 +20,8 @@ set(CONFIG_MAX_SIZE 1000)
 set(CONFIG_N_LAYERS 2)
 set(CONFIG_DROPOUT 0.2)
 set(CONFIG_LEARNING_RATE 5e-3)
+set(CONFIG_OUTPUT_PATH "data/output.txt")
 
-configure_file("config.hpp.in" "${CMAKE_CURRENT_SOURCE_DIR}/src/common/config.hpp")
+configure_file("config.hpp.in" "${CMAKE_SOURCE_DIR}/src/common/config.hpp")
 
 add_subdirectory(src)
