@@ -24,11 +24,11 @@ int main() {
       auto input = data.slice(0, 0, BATCH_SIZE);
       auto expected = data.slice(0, BATCH_SIZE, BATCH_SIZE + OUTPUT_SIZE);
       auto loss = predictor.Train(input, expected);
-      std::cout << "Loss: " << loss << "\n";
 
       input = data.slice(0, OUTPUT_SIZE, BATCH_SIZE + OUTPUT_SIZE);
       auto prediction = predictor.Predict(input)[0].item<int64_t>();
-      std::cout << "Prediction: " << prediction << "\n";
+      prediction = prediction > 0 ? prediction : 0;
+      std::cout << "Prediction: " << prediction << " | Loss: " << loss << "\n";
 
       dataset.erase(dataset.begin());
     }
