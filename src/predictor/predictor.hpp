@@ -10,12 +10,17 @@ class Predictor {
  public:
   Predictor()
       : model_(
-            SEQ_LEN - OUTPUT_SIZE, HIDDEN_SIZE, OUTPUT_SIZE, N_LAYERS, DROPOUT),
+            INPUT_SIZE,
+            HIDDEN_SIZE,
+            OUTPUT_SIZE,
+            BATCH_SIZE,
+            N_LAYERS,
+            DROPOUT),
         criterion_(),
         optimizer_(model_.parameters(), {LEARNING_RATE}) {}
 
   double Train(const torch::Tensor& batch_data, const torch::Tensor& expected);
-  double Predict(const torch::Tensor& batch_data);
+  torch::Tensor Predict(const torch::Tensor& batch_data);
 
  private:
   GruNet model_;

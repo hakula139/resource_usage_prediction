@@ -2,6 +2,7 @@
 
 #include <iostream>
 
+#include "config.hpp"
 #include "torch/torch.h"
 
 namespace nn = torch::nn;
@@ -10,17 +11,12 @@ using torch::Tensor;
 
 double Predictor::Train(const Tensor& batch_data, const Tensor& expected) {
   model_.train();
-  auto hidden = model_.InitHidden(batch_data.size(0));
   model_.zero_grad();
+  model_.InitHidden(BATCH_SIZE);
 
-  std::cout << batch_data << "\n" << hidden << "\n";
+  auto output = model_.Forward(batch_data / MAX_SIZE) * MAX_SIZE;
 
-  auto [output, new_hidden] = model_.Forward(batch_data, hidden);
-  hidden = new_hidden;
-
-  std::cout << output << "\n" << new_hidden << "\n" << expected << "\n";
-
-  auto loss = criterion_(output, expected);
+  auto loss = criterion_(output, expected.to(torch::kFloat));
   auto cur_loss = loss.item<double>();
 
   loss.backward();
@@ -28,13 +24,10 @@ double Predictor::Train(const Tensor& batch_data, const Tensor& expected) {
   return cur_loss;
 }
 
-double Predictor::Predict(const Tensor& batch_data) {
+Tensor Predictor::Predict(const Tensor& batch_data) {
   model_.eval();
-  auto hidden = model_.InitHidden(SEQ_LEN);
+  model_.InitHidden(BATCH_SIZE);
 
-  auto [output, new_hidden] = model_.Forward(batch_data, hidden);
-  hidden = new_hidden;
-
-  auto prediction = output[0].item<double>();
-  return prediction;
+  auto output = model_.Forward(batch_data / MAX_SIZE) * MAX_SIZE;
+  return output;
 }

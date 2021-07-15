@@ -14,17 +14,23 @@ int main() {
 
   while (true) {
     int64_t cur_data;
+    std::cout << "\rInput: ";
     std::cin >> cur_data;
     if (cur_data < 0) break;
     dataset.push_back(cur_data);
 
-    if (dataset.size() == SEQ_LEN) {
-      auto data = torch::from_blob(dataset.data(), {SEQ_LEN});
-      auto loss = predictor.Train(
-          data.slice(0, 0, SEQ_LEN - 1), data[SEQ_LEN - 1]);
+    if (dataset.size() == BATCH_SIZE + OUTPUT_SIZE) {
+      auto data = torch::tensor(dataset);
+
+      auto input = data.slice(0, 0, BATCH_SIZE);
+      auto expected = data.slice(0, BATCH_SIZE, BATCH_SIZE + OUTPUT_SIZE);
+      auto loss = predictor.Train(input, expected);
       std::cout << "Current loss: " << loss << "\n";
-      auto prediction = predictor.Predict(data.slice(0, 1, SEQ_LEN));
+
+      input = data.slice(0, OUTPUT_SIZE, BATCH_SIZE + OUTPUT_SIZE);
+      auto prediction = predictor.Predict(input);
       std::cout << "Prediction: " << prediction << "\n";
+
       dataset.erase(dataset.begin());
     }
   }
