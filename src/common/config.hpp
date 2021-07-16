@@ -8,7 +8,7 @@
 constexpr int64_t INPUT_SIZE = 1;
 constexpr int64_t HIDDEN_SIZE = 200;
 constexpr int64_t OUTPUT_SIZE = 1;
-constexpr int64_t BATCH_SIZE = 10;
+constexpr int64_t BATCH_SIZE = 6;
 constexpr int64_t MAX_SIZE = 500;
 constexpr int64_t N_LAYERS = 3;
 constexpr double DROPOUT = 0.2;
