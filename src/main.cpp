@@ -43,7 +43,7 @@ int main() {
       std::cout << "> " << prediction << " | Loss: " << loss << "\n";
       output_file << prediction << " ";
 
-      prediction_x.push_back(epoch);
+      prediction_x.push_back(epoch + 1);
       prediction_y.push_back(prediction);
       loss_x.push_back(epoch);
       loss_y.push_back(loss);
