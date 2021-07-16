@@ -1,4 +1,8 @@
 # ./src/common/CMakeLists.txt
 
-add_library(Common INTERFACE)
-target_include_directories(Common INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}")
+aux_source_directory(. DIR_COMMON_SRCS)
+add_library(Common STATIC ${DIR_COMMON_SRCS})
+target_include_directories(Common
+    INTERFACE
+        "${CMAKE_CURRENT_SOURCE_DIR}"
+)

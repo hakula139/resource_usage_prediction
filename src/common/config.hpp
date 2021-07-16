@@ -13,7 +13,9 @@ constexpr int64_t MAX_SIZE = 1000;
 constexpr int64_t N_LAYERS = 2;
 constexpr double DROPOUT = 0.2;
 constexpr double LEARNING_RATE = 5e-3;
+constexpr const char* INPUT_PATH = "data/input.txt";
 constexpr const char* OUTPUT_PATH = "data/output.txt";
+constexpr const char* PLOT_PATH = "figures/plot.pdf";
 
 // clang-format on
 

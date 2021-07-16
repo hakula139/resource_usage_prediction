@@ -5,20 +5,31 @@
 #include <vector>
 
 #include "common/config.hpp"
+#include "common/utils.hpp"
 #include "predictor/predictor.hpp"
 
 int main() {
   std::vector<int64_t> dataset;
   Predictor predictor;
-  std::ofstream output(OUTPUT_PATH);
+  std::ifstream input_file(INPUT_PATH);
+  std::ofstream output_file(OUTPUT_PATH);
+
+  // Points for plotting
+  std::vector<int64_t> expected_x;
+  std::vector<int64_t> expected_y;
+  std::vector<int64_t> prediction_x;
+  std::vector<int64_t> prediction_y;
 
   std::cout << "Server started.\n";
 
-  while (true) {
+  for (int64_t epoch = 1; !input_file.eof(); ++epoch) {
     int64_t cur_data;
-    std::cin >> cur_data;
+    input_file >> cur_data;
     if (cur_data < 0) break;
     dataset.push_back(cur_data);
+
+    expected_x.push_back(epoch);
+    expected_y.push_back(cur_data);
 
     if (dataset.size() == BATCH_SIZE + OUTPUT_SIZE) {
       auto data = torch::tensor(dataset);
@@ -31,11 +42,17 @@ int main() {
       auto prediction = predictor.Predict(input)[0].item<int64_t>();
       prediction = prediction > 0 ? prediction : 0;
       std::cout << "> " << prediction << " | Loss: " << loss << "\n";
-      output << prediction << " ";
+      output_file << prediction << " ";
+
+      prediction_x.push_back(epoch);
+      prediction_y.push_back(prediction);
 
       dataset.erase(dataset.begin());
     }
   }
 
-  output.close();
+  input_file.close();
+  output_file.close();
+
+  Plot(expected_x, expected_y, prediction_x, prediction_y);
 }

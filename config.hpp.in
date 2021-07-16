@@ -13,7 +13,9 @@ constexpr int64_t MAX_SIZE = @CONFIG_MAX_SIZE@;
 constexpr int64_t N_LAYERS = @CONFIG_N_LAYERS@;
 constexpr double DROPOUT = @CONFIG_DROPOUT@;
 constexpr double LEARNING_RATE = @CONFIG_LEARNING_RATE@;
+constexpr const char* INPUT_PATH = "@CONFIG_INPUT_PATH@";
 constexpr const char* OUTPUT_PATH = "@CONFIG_OUTPUT_PATH@";
+constexpr const char* PLOT_PATH = "@CONFIG_PLOT_PATH@";
 
 // clang-format on
 
