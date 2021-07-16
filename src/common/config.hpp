@@ -6,16 +6,17 @@
 // clang-format off
 
 constexpr int64_t INPUT_SIZE = 1;
-constexpr int64_t HIDDEN_SIZE = 50;
+constexpr int64_t HIDDEN_SIZE = 200;
 constexpr int64_t OUTPUT_SIZE = 1;
-constexpr int64_t BATCH_SIZE = 5;
-constexpr int64_t MAX_SIZE = 1000;
-constexpr int64_t N_LAYERS = 2;
+constexpr int64_t BATCH_SIZE = 10;
+constexpr int64_t MAX_SIZE = 500;
+constexpr int64_t N_LAYERS = 3;
 constexpr double DROPOUT = 0.2;
 constexpr double LEARNING_RATE = 5e-3;
 constexpr const char* INPUT_PATH = "data/input.txt";
 constexpr const char* OUTPUT_PATH = "data/output.txt";
-constexpr const char* PLOT_PATH = "figures/plot.pdf";
+constexpr const char* PREDICTIONS_FIGURE_PATH = "figures/predictions.pdf";
+constexpr const char* LOSS_FIGURE_PATH = "figures/loss.pdf";
 
 // clang-format on
 

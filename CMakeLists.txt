@@ -14,16 +14,17 @@ find_package(sciplot REQUIRED)
 
 # Parameters
 set(CONFIG_INPUT_SIZE 1)
-set(CONFIG_HIDDEN_SIZE 50)
+set(CONFIG_HIDDEN_SIZE 200)
 set(CONFIG_OUTPUT_SIZE 1)
-set(CONFIG_BATCH_SIZE 5)
-set(CONFIG_MAX_SIZE 1000)
-set(CONFIG_N_LAYERS 2)
+set(CONFIG_BATCH_SIZE 10)
+set(CONFIG_MAX_SIZE 500)
+set(CONFIG_N_LAYERS 3)
 set(CONFIG_DROPOUT 0.2)
 set(CONFIG_LEARNING_RATE 5e-3)
 set(CONFIG_INPUT_PATH "data/input.txt")
 set(CONFIG_OUTPUT_PATH "data/output.txt")
-set(CONFIG_PLOT_PATH "figures/plot.pdf")
+set(CONFIG_PREDICTIONS_FIGURE_PATH "figures/predictions.pdf")
+set(CONFIG_LOSS_FIGURE_PATH "figures/loss.pdf")
 
 configure_file("config.hpp.in" "${CMAKE_SOURCE_DIR}/src/common/config.hpp")
 

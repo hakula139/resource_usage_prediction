@@ -15,10 +15,9 @@ int main() {
   std::ofstream output_file(OUTPUT_PATH);
 
   // Points for plotting
-  std::vector<int64_t> expected_x;
-  std::vector<int64_t> expected_y;
-  std::vector<int64_t> prediction_x;
-  std::vector<int64_t> prediction_y;
+  std::vector<int64_t> expected_x, expected_y;
+  std::vector<int64_t> prediction_x, prediction_y;
+  std::vector<int64_t> loss_x, loss_y;
 
   std::cout << "Server started.\n";
 
@@ -46,6 +45,8 @@ int main() {
 
       prediction_x.push_back(epoch);
       prediction_y.push_back(prediction);
+      loss_x.push_back(epoch);
+      loss_y.push_back(loss);
 
       dataset.erase(dataset.begin());
     }
@@ -54,5 +55,6 @@ int main() {
   input_file.close();
   output_file.close();
 
-  Plot(expected_x, expected_y, prediction_x, prediction_y);
+  PlotPredictions(expected_x, expected_y, prediction_x, prediction_y);
+  PlotLoss(loss_x, loss_y);
 }
