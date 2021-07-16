@@ -29,3 +29,4 @@ set(CONFIG_LOSS_FIGURE_PATH "figures/loss.pdf")
 configure_file("config.hpp.in" "${CMAKE_SOURCE_DIR}/src/common/config.hpp")
 
 add_subdirectory(src)
+add_subdirectory(tests)
