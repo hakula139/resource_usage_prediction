@@ -16,6 +16,8 @@ class GruNet : public torch::nn::Module {
   torch::Tensor Forward(torch::Tensor input);
   void InitHidden(int64_t batch_size);
 
+  friend class Predictor;
+
  private:
   int64_t hidden_size_;
   int64_t batch_size_;
@@ -23,6 +25,7 @@ class GruNet : public torch::nn::Module {
 
   torch::nn::GRU gru_;
   torch::nn::Linear fc_;
+  torch::nn::ReLU relu_;
 
   torch::Tensor hidden_;
 };

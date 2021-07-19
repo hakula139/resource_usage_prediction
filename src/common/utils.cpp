@@ -17,6 +17,7 @@ void PlotPredictions(
   plot.xlabel("Epoch");
   plot.ylabel("Count");
   plot.legend().atTop().fontSize(16).displayHorizontal();
+  plot.palette("gnpu");
 
   plot.drawCurve(x1, y1).label("Expected");
   plot.drawCurve(x2, y2).label("Predictions");

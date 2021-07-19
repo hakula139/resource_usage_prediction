@@ -31,7 +31,7 @@ Tensor GruNet::Forward(Tensor input) {
   hidden_ = hidden_n;
   output = output.reshape({batch_size_, -1});
   output = fc_(output);
-  return output[batch_size_ - 1];
+  return output[0];
 }
 
 void GruNet::InitHidden(int64_t batch_size) {

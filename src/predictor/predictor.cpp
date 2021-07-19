@@ -29,5 +29,5 @@ Tensor Predictor::Predict(const Tensor& batch_data) {
   model_.InitHidden(BATCH_SIZE);
 
   auto output = model_.Forward(batch_data / MAX_SIZE) * MAX_SIZE;
-  return output;
+  return model_.relu_(output);
 }

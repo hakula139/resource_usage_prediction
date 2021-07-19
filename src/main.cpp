@@ -39,7 +39,6 @@ int main() {
 
       input = data.slice(0, OUTPUT_SIZE, BATCH_SIZE + OUTPUT_SIZE);
       auto prediction = predictor.Predict(input)[0].item<int64_t>();
-      prediction = prediction > 0 ? prediction : 0;
       std::cout << "> " << prediction << " | Loss: " << loss << "\n";
       output_file << prediction << " ";
 
