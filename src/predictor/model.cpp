@@ -20,13 +20,18 @@ GruNet::GruNet(
                .num_layers(n_layers)
                .batch_first(true)
                .dropout(dropout)),
-      fc_(nn::LinearOptions(hidden_size, output_size)) {
-  register_module("gru", gru_);
-  register_module("fc", fc_);
+      fc_(nn::LinearOptions(hidden_size, output_size)),
+      relu_(),
+      dropout_(nn::DropoutOptions(dropout)) {
+  register_module("gru_", gru_);
+  register_module("fc_", fc_);
+  register_module("relu_", relu_);
+  register_module("dropout_", dropout_);
 }
 
 Tensor GruNet::Forward(Tensor input) {
   input = input.reshape({batch_size_, 1, -1});
+  input = dropout_(input);
   auto [output, hidden_n] = gru_(input, hidden_);
   hidden_ = hidden_n;
   output = output.reshape({batch_size_, -1});
