@@ -16,7 +16,7 @@ double Predictor::Train(const Tensor& batch_data, const Tensor& expected) {
 
   auto output = model_.Forward(batch_data / MAX_SIZE) * MAX_SIZE;
 
-  auto loss = criterion_(output, expected.to(torch::kFloat));
+  auto loss = Loss(output, expected);
   auto cur_loss = loss.item<double>();
 
   loss.backward();
@@ -30,4 +30,8 @@ Tensor Predictor::Predict(const Tensor& batch_data) {
 
   auto output = model_.Forward(batch_data / MAX_SIZE) * MAX_SIZE;
   return model_.relu_(output);
+}
+
+Tensor Predictor::Loss(const Tensor& output, const Tensor& target) {
+  return criterion_(output, target);
 }

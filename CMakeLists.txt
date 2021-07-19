@@ -13,18 +13,23 @@ find_package(Torch REQUIRED)
 find_package(sciplot REQUIRED)
 
 # Parameters
+
 set(CONFIG_INPUT_SIZE 1)
 set(CONFIG_HIDDEN_SIZE 300)
 set(CONFIG_OUTPUT_SIZE 2)
-set(CONFIG_BATCH_SIZE 5)
+set(CONFIG_BATCH_SIZE 20)
 set(CONFIG_MAX_SIZE 500)
 set(CONFIG_N_LAYERS 2)
 set(CONFIG_DROPOUT 0.2)
-set(CONFIG_LEARNING_RATE 5e-3)
-set(CONFIG_INPUT_PATH "data/input.txt")
-set(CONFIG_OUTPUT_PATH "data/output.txt")
-set(CONFIG_PREDICTIONS_FIGURE_PATH "figures/predictions.pdf")
-set(CONFIG_LOSS_FIGURE_PATH "figures/loss.pdf")
+set(CONFIG_LEARNING_RATE 4e-3)
+
+set(CONFIG_DATA_DIR "data")
+set(CONFIG_INPUT_PATH "${CONFIG_DATA_DIR}/input.txt")
+set(CONFIG_OUTPUT_PATH "${CONFIG_DATA_DIR}/output.txt")
+set(CONFIG_FIGURE_DIR "figures")
+set(CONFIG_PREDICTIONS_FIGURE_PATH "${CONFIG_FIGURE_DIR}/predictions.svg")
+set(CONFIG_TRAIN_LOSS_FIGURE_PATH "${CONFIG_FIGURE_DIR}/train_loss.svg")
+set(CONFIG_VALID_LOSS_FIGURE_PATH "${CONFIG_FIGURE_DIR}/valid_loss.svg")
 
 configure_file("config.hpp.in" "${CMAKE_SOURCE_DIR}/src/common/config.hpp")
 

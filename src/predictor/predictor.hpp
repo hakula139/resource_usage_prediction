@@ -21,6 +21,7 @@ class Predictor {
 
   double Train(const torch::Tensor& batch_data, const torch::Tensor& expected);
   torch::Tensor Predict(const torch::Tensor& batch_data);
+  torch::Tensor Loss(const torch::Tensor& output, const torch::Tensor& target);
 
  private:
   GruNet model_;

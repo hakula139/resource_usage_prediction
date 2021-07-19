@@ -13,10 +13,14 @@ constexpr int64_t MAX_SIZE = @CONFIG_MAX_SIZE@;
 constexpr int64_t N_LAYERS = @CONFIG_N_LAYERS@;
 constexpr double DROPOUT = @CONFIG_DROPOUT@;
 constexpr double LEARNING_RATE = @CONFIG_LEARNING_RATE@;
+
+constexpr const char* DATA_DIR = "@CONFIG_DATA_DIR@";
 constexpr const char* INPUT_PATH = "@CONFIG_INPUT_PATH@";
 constexpr const char* OUTPUT_PATH = "@CONFIG_OUTPUT_PATH@";
+constexpr const char* FIGURE_DIR = "@CONFIG_FIGURE_DIR@";
 constexpr const char* PREDICTIONS_FIGURE_PATH = "@CONFIG_PREDICTIONS_FIGURE_PATH@";
-constexpr const char* LOSS_FIGURE_PATH = "@CONFIG_LOSS_FIGURE_PATH@";
+constexpr const char* TRAIN_LOSS_FIGURE_PATH = "@CONFIG_TRAIN_LOSS_FIGURE_PATH@";
+constexpr const char* VALID_LOSS_FIGURE_PATH = "@CONFIG_VALID_LOSS_FIGURE_PATH@";
 
 // clang-format on
 
