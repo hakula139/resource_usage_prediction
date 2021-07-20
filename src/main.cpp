@@ -1,5 +1,7 @@
 #include <torch/torch.h>
 
+#include <algorithm>
+#include <chrono>  // NOLINT(build/c++11)
 #include <filesystem>
 #include <fstream>
 #include <iostream>
@@ -10,6 +12,9 @@
 #include "predictor/predictor.hpp"
 
 namespace fs = std::filesystem;
+
+using std::chrono::duration;
+using std::chrono::high_resolution_clock;
 
 int main() {
   std::vector<int64_t> dataset;
@@ -26,12 +31,18 @@ int main() {
   std::vector<int64_t> train_loss_x, valid_loss_x, naive_loss_x;
   std::vector<double> train_loss_y, valid_loss_y, naive_loss_y;
 
-  std::cout << "Server started.\n";
+  auto total_time = 0.0;
+  auto max_time = 0.0;
+  auto num_time = 0;
+
+  std::cout << "Server started.\n" << std::setprecision(5);
 
   for (int64_t epoch = 1; !input_file.eof(); ++epoch) {
     int64_t cur_data;
     input_file >> cur_data;
     if (cur_data < 0) break;
+
+    auto start_time = high_resolution_clock::now();
     dataset.push_back(cur_data);
 
     expected_x.push_back(epoch);
@@ -64,15 +75,28 @@ int main() {
       prediction_x.push_back(epoch + 1);
       prediction_y.push_back(prediction);
 
-      std::cout << "> " << prediction << " (" << naive_pred << ") \t"
-                << "Loss: " << train_loss << " (train) | " << valid_loss
-                << " (valid) | " << naive_loss << " (naive)\n";
+      auto end_time = high_resolution_clock::now();
+      auto time = duration<double, std::milli>(end_time - start_time).count();
+      total_time += time;
+      max_time = std::max(max_time, time);
+      ++num_time;
+
+      std::cout << "> " << prediction << " (" << naive_pred << ") \t";
+      std::cout << "Loss: ";
+      std::cout << std::setw(10) << train_loss << " (train) | ";
+      std::cout << std::setw(10) << valid_loss << " (valid) | ";
+      std::cout << naive_loss << " (naive) \t";
+      std::cout << "Time: " << time << " ms\n";
       output_file << prediction << " ";
     }
   }
 
   input_file.close();
   output_file.close();
+
+  std::cout << "Time: ";
+  std::cout << total_time / num_time << " ms (average) | ";
+  std::cout << max_time << " ms (max)\n";
 
   PlotPredictions(expected_x, expected_y, prediction_x, prediction_y);
   PlotTrainLoss(train_loss_x, train_loss_y, naive_loss_x, naive_loss_y);
