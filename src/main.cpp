@@ -33,7 +33,7 @@ int main() {
 
   auto total_time = 0.0;
   auto max_time = 0.0;
-  auto num_time = 0;
+  auto time_count = 0;
 
   std::cout << "Server started.\n" << std::setprecision(5);
 
@@ -76,9 +76,9 @@ int main() {
       auto time = duration<double, std::milli>(end_time - start_time).count();
       total_time += time;
       max_time = std::max(max_time, time);
-      ++num_time;
+      ++time_count;
 
-      std::cout << "> " << prediction << " (" << naive_pred << ") \t";
+      std::cout << "> " << prediction << " (naive: " << naive_pred << ") \t";
       std::cout << "Loss: ";
       std::cout << std::setw(10) << train_loss << " (train) | ";
       std::cout << naive_loss << " (naive) \t";
@@ -91,7 +91,7 @@ int main() {
   output_file.close();
 
   std::cout << "Time: ";
-  std::cout << total_time / num_time << " ms (average) | ";
+  std::cout << total_time / time_count << " ms (average) | ";
   std::cout << max_time << " ms (max)\n";
 
   PlotPredictions(expected_x, expected_y, prediction_x, prediction_y);
