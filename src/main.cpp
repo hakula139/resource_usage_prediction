@@ -78,7 +78,7 @@ int main() {
       max_time = std::max(max_time, time);
       ++time_count;
 
-      std::cout << "> " << prediction << " (naive: " << naive_pred << ") \t";
+      std::cout << "> " << prediction << " (naive: " << naive_pred << ")   \t";
       std::cout << "Loss: ";
       std::cout << std::setw(10) << train_loss << " (train) | ";
       std::cout << naive_loss << " (naive) \t";
