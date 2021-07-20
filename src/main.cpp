@@ -28,8 +28,8 @@ int main() {
   // Points for plotting
   std::vector<int64_t> expected_x, prediction_x;
   std::vector<int64_t> expected_y, prediction_y;
-  std::vector<int64_t> train_loss_x, valid_loss_x, naive_loss_x;
-  std::vector<double> train_loss_y, valid_loss_y, naive_loss_y;
+  std::vector<int64_t> train_loss_x, naive_loss_x;
+  std::vector<double> train_loss_y, naive_loss_y;
 
   auto total_time = 0.0;
   auto max_time = 0.0;
@@ -53,22 +53,19 @@ int main() {
       auto data = torch::tensor(dataset).to(torch::kFloat);
       dataset.erase(dataset.begin());
 
-      auto input = data.slice(0, 0, BATCH_SIZE);
+      auto train_input = data.slice(0, 0, BATCH_SIZE);
       auto expected = data.slice(0, BATCH_SIZE, size);
-      auto train_loss = predictor.Train(input, expected);
+      auto train_loss = predictor.Train(train_input, expected);
       train_loss_x.push_back(epoch);
       train_loss_y.push_back(train_loss);
-
-      input = data.slice(0, OUTPUT_SIZE, BATCH_SIZE + OUTPUT_SIZE);
-      auto predictions = predictor.Predict(input);
-      auto valid_loss = predictor.Loss(predictions, expected).item<double>();
-      valid_loss_x.push_back(epoch);
-      valid_loss_y.push_back(valid_loss);
 
       auto naive_preds = data.slice(0, BATCH_SIZE - OUTPUT_SIZE, BATCH_SIZE);
       auto naive_loss = predictor.Loss(naive_preds, expected).item<double>();
       naive_loss_x.push_back(epoch);
       naive_loss_y.push_back(naive_loss);
+
+      auto valid_input = data.slice(0, OUTPUT_SIZE, size);
+      auto predictions = predictor.Predict(valid_input);
 
       auto prediction = round(predictions[0].item<double>());
       auto naive_pred = round(naive_preds[0].item<double>());
@@ -84,7 +81,6 @@ int main() {
       std::cout << "> " << prediction << " (" << naive_pred << ") \t";
       std::cout << "Loss: ";
       std::cout << std::setw(10) << train_loss << " (train) | ";
-      std::cout << std::setw(10) << valid_loss << " (valid) | ";
       std::cout << naive_loss << " (naive) \t";
       std::cout << "Time: " << time << " ms\n";
       output_file << prediction << " ";
@@ -100,5 +96,4 @@ int main() {
 
   PlotPredictions(expected_x, expected_y, prediction_x, prediction_y);
   PlotTrainLoss(train_loss_x, train_loss_y, naive_loss_x, naive_loss_y);
-  PlotValidLoss(valid_loss_x, valid_loss_y, naive_loss_x, naive_loss_y);
 }
