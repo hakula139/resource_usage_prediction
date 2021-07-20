@@ -6,12 +6,12 @@
 // clang-format off
 
 constexpr int64_t INPUT_SIZE = 1;
-constexpr int64_t HIDDEN_SIZE = 300;
-constexpr int64_t OUTPUT_SIZE = 2;
-constexpr int64_t BATCH_SIZE = 20;
+constexpr int64_t HIDDEN_SIZE = 50;
+constexpr int64_t OUTPUT_SIZE = 1;
+constexpr int64_t BATCH_SIZE = 50;
 constexpr int64_t MAX_SIZE = 500;
 constexpr int64_t N_LAYERS = 2;
-constexpr double DROPOUT = 0.2;
+constexpr double DROPOUT = 0.3;
 constexpr double LEARNING_RATE = 4e-3;
 
 constexpr const char* DATA_DIR = "data";

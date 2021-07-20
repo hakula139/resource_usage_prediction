@@ -54,16 +54,17 @@ int main() {
       valid_loss_x.push_back(epoch);
       valid_loss_y.push_back(valid_loss);
 
-      auto naive_pred = data.slice(0, BATCH_SIZE - OUTPUT_SIZE, BATCH_SIZE);
-      auto naive_loss = predictor.Loss(naive_pred, expected).item<double>();
+      auto naive_preds = data.slice(0, BATCH_SIZE - OUTPUT_SIZE, BATCH_SIZE);
+      auto naive_loss = predictor.Loss(naive_preds, expected).item<double>();
       naive_loss_x.push_back(epoch);
       naive_loss_y.push_back(naive_loss);
 
-      auto prediction = predictions[0].item<int64_t>();
+      auto prediction = round(predictions[0].item<double>());
+      auto naive_pred = round(naive_preds[0].item<double>());
       prediction_x.push_back(epoch + 1);
       prediction_y.push_back(prediction);
 
-      std::cout << "> " << prediction << " \t"
+      std::cout << "> " << prediction << " (" << naive_pred << ") \t"
                 << "Loss: " << train_loss << " (train) | " << valid_loss
                 << " (valid) | " << naive_loss << " (naive)\n";
       output_file << prediction << " ";
