@@ -6,13 +6,14 @@
 // clang-format off
 
 constexpr int64_t INPUT_SIZE = 1;
-constexpr int64_t HIDDEN_SIZE = 50;
+constexpr int64_t HIDDEN_SIZE = 10;
 constexpr int64_t OUTPUT_SIZE = 1;
-constexpr int64_t BATCH_SIZE = 50;
-constexpr int64_t MAX_SIZE = 1000;
+constexpr int64_t BATCH_SIZE = 20;
+constexpr int64_t MAX_SIZE = 5000;
 constexpr int64_t N_LAYERS = 2;
-constexpr double DROPOUT = 0.3;
+constexpr double DROPOUT = 0.0;
 constexpr double LEARNING_RATE = 5e-3;
+constexpr double LOSS_THRESHOLD = 100;
 
 constexpr const char* DATA_DIR = "data";
 constexpr const char* INPUT_PATH = "data/input.txt";

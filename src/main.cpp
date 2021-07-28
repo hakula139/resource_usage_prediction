@@ -5,6 +5,7 @@
 #include <filesystem>
 #include <fstream>
 #include <iostream>
+#include <numeric>
 #include <vector>
 
 #include "common/config.hpp"
@@ -22,6 +23,8 @@ int main() {
 
   fs::create_directories(FIGURE_DIR);
 
+  std::cout << "Server started.\n" << std::setprecision(5);
+
   std::ifstream input_file(INPUT_PATH);
   std::ofstream output_file(OUTPUT_PATH);
 
@@ -31,14 +34,15 @@ int main() {
   std::vector<int64_t> train_loss_x, naive_loss_x;
   std::vector<double> train_loss_y, naive_loss_y;
 
-  auto total_time = 0.0;
-  auto max_time = 0.0;
-  auto time_count = 0;
+  auto start_plotting = false;
 
-  std::cout << "Server started.\n" << std::setprecision(5);
+  double total_time = 0.0, max_time = 0.0;
+  int64_t time_count = 0;
+  double total_loss = 0.0, avg_loss = -1.0;
+  int64_t loss_count = 0;
 
   for (int64_t epoch = 1; !input_file.eof(); ++epoch) {
-    int64_t cur_data;
+    int64_t cur_data = -1;
     input_file >> cur_data;
     if (cur_data < 0) break;
 
@@ -56,8 +60,26 @@ int main() {
       auto train_input = data.slice(0, 0, BATCH_SIZE);
       auto expected = data.slice(0, BATCH_SIZE, size);
       auto train_loss = predictor.Train(train_input, expected);
-      train_loss_x.push_back(epoch);
-      train_loss_y.push_back(train_loss);
+
+      if (train_loss < LOSS_THRESHOLD) {
+        start_plotting = true;
+      } else {
+        start_plotting = false;
+        train_loss_x.clear();
+        train_loss_y.clear();
+        total_loss = 0;
+        loss_count = 0;
+      }
+
+      if (start_plotting) {
+        train_loss_x.push_back(epoch);
+        train_loss_y.push_back(train_loss);
+        total_loss += train_loss;
+        ++loss_count;
+      }
+
+      avg_loss = loss_count > 0 ? total_loss / loss_count : -1.0;
+      // predictor.UpdateLR();
 
       auto naive_preds = data.slice(0, BATCH_SIZE - OUTPUT_SIZE, BATCH_SIZE);
       auto naive_loss = predictor.Loss(naive_preds, expected).item<double>();
@@ -78,11 +100,17 @@ int main() {
       max_time = std::max(max_time, time);
       ++time_count;
 
-      std::cout << "> " << prediction << " (naive: " << naive_pred << ")   \t";
-      std::cout << "Loss: ";
-      std::cout << std::setw(10) << train_loss << " (train) | ";
-      std::cout << naive_loss << " (naive) \t";
-      std::cout << "Time: " << time << " ms\n";
+      std::cout << "#" << std::setw(6) << std::left << epoch + 1;
+      std::cout << " > " << prediction << " (naive: " << naive_pred << ")  ";
+      std::cout << " \tLoss:" << std::right;
+      std::cout << " " << std::setw(9) << train_loss << " (current)";
+      std::cout << " | " << std::setw(3) << naive_loss << " (naive)";
+      if (avg_loss >= 0) {
+        std::cout << " | " << std::setw(9) << avg_loss << " (average)";
+      } else {
+        std::cout << std::string(22, ' ');
+      }
+      std::cout << " \tTime: " << time << " ms" << std::endl;
       output_file << prediction << " ";
     }
   }
@@ -90,9 +118,17 @@ int main() {
   input_file.close();
   output_file.close();
 
-  std::cout << "Time: ";
-  std::cout << total_time / time_count << " ms (average) | ";
-  std::cout << max_time << " ms (max)\n";
+  auto total_naive_loss = std::accumulate(
+      naive_loss_y.begin(), naive_loss_y.end(), 0.0);
+  auto avg_naive_loss = total_naive_loss / naive_loss_y.size();
+  auto avg_time = total_time / time_count;
+
+  std::cout << "Loss:";
+  std::cout << " " << avg_loss << " (average)";
+  std::cout << " | " << avg_naive_loss << " (naive)\n";
+  std::cout << "Time:";
+  std::cout << " " << avg_time << " ms (average)";
+  std::cout << " | " << max_time << " ms (max)" << std::endl;
 
   PlotPredictions(expected_x, expected_y, prediction_x, prediction_y);
   PlotTrainLoss(train_loss_x, train_loss_y, naive_loss_x, naive_loss_y);

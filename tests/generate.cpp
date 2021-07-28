@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <cmath>
 #include <filesystem>
 #include <fstream>
@@ -11,8 +12,8 @@
 namespace fs = std::filesystem;
 
 int main() {
-  std::random_device rd;
-  std::mt19937 rng(rd());
+  auto seed = 2021;
+  std::mt19937 rng(seed);
   std::normal_distribution<double> normal_dist(0.0);
 
   fs::create_directories(DATA_DIR);
@@ -38,7 +39,9 @@ int main() {
         // Random noise
         normal_dist(rng) * 5,
     };
-    dataset.push_back(std::accumulate(data.begin(), data.end(), 0));
+
+    auto sum = std::accumulate(data.begin(), data.end(), 0.0);
+    dataset.push_back(std::max(sum, 0.0));
   }
 
   for (auto i = 0; i < 50; ++i) {

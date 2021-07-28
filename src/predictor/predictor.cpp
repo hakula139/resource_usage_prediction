@@ -33,5 +33,7 @@ Tensor Predictor::Predict(const Tensor& batch_data) {
 }
 
 Tensor Predictor::Loss(const Tensor& output, const Tensor& target) {
-  return criterion_(output, target);
+  return criterion_(output, target).sqrt();
 }
+
+void Predictor::UpdateLR() { scheduler_.step(); }
