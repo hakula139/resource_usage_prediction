@@ -1,38 +1,33 @@
 #include "model.hpp"
 
-#include <torch/torch.h>
-
 #include <string>
+
+#include "torch/torch.h"
 
 namespace nn = torch::nn;
 
 using torch::Tensor;
 
 GruNet::GruNet(
-    int64_t input_size,
-    int64_t hidden_size,
-    int64_t output_size,
-    int64_t batch_size,
-    int64_t n_layers,
-    double dropout)
+    int64_t hidden_size, int64_t seq_len, int64_t n_layers, double dropout)
     : hidden_size_(hidden_size),
-      batch_size_(batch_size),
+      seq_len_(seq_len),
       n_layers_(n_layers),
-      gru_(nn::GRUOptions(input_size, hidden_size)
-               .num_layers(n_layers)
-               .batch_first(true)
-               .bidirectional(true)
-               .dropout(dropout)),
-      fc_(nn::LinearOptions(hidden_size << 1, output_size)),
+      encoder_(nn::GRUOptions(1, hidden_size)
+                   .num_layers(n_layers)
+                   .batch_first(true)
+                   .dropout(dropout)),
+      decoder_(nn::GRUCellOptions(1, hidden_size)),
+      fc_(nn::LinearOptions(hidden_size, 1)),
       relu_(),
       dropout_(nn::DropoutOptions(dropout)) {
-  register_module("gru_", gru_);
+  register_module("encoder_", encoder_);
   register_module("fc_", fc_);
   register_module("relu_", relu_);
   register_module("dropout_", dropout_);
 
   // Initialize weights
-  auto params = gru_->named_parameters();
+  auto params = encoder_->named_parameters();
   for (auto&& param : params) {
     auto name = param.key();
     auto data = param.value();
@@ -45,15 +40,31 @@ GruNet::GruNet(
 }
 
 Tensor GruNet::Forward(Tensor input) {
-  input = input.reshape({batch_size_, 1, -1});
-  auto [output, hidden_n] = gru_(input, hidden_);
-  hidden_ = hidden_n;
-  output = output.reshape({batch_size_, -1});
-  output = fc_(output);
-  return output.mean(0);
+  auto batch_size = input.size(0);
+  auto init_hidden = InitHidden(batch_size);
+
+  /**
+   * `enc_output`: shape(batch_size, seq_len, hidden_size)
+   * `enc_hidden`: shape(batch_size, hidden_size)
+   */
+  auto [enc_output, enc_hidden] = encoder_(input.unsqueeze(2), init_hidden);
+  // Only use the last layer in hidden state
+  enc_hidden = enc_hidden[n_layers_ - 1];
+
+  /**
+   * `dec_output`: shape(batch_size, 1)
+   * `dec_hidden`: shape(batch_size, hidden_size)
+   */
+  // Only use the last value in each sequence
+  auto last_input = input.index({torch::indexing::Slice(), seq_len_ - 1});
+  auto dec_hidden = decoder_(last_input.unsqueeze(1), enc_hidden);
+  auto dec_output = fc_(dec_hidden);
+  dec_hidden = dropout_(dec_hidden);
+
+  return dec_output;
 }
 
-void GruNet::InitHidden(int64_t batch_size) {
+Tensor GruNet::InitHidden(int64_t batch_size) {
   auto weight = parameters().at(0).data();
-  hidden_ = weight.new_zeros({n_layers_ << 1, batch_size, hidden_size_});
+  return weight.new_zeros({n_layers_, batch_size, hidden_size_});
 }

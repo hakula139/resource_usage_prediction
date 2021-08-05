@@ -17,7 +17,7 @@ int main() {
   fs::create_directories(DATA_DIR);
   std::ofstream output_file(OUTPUT_PATH);
 
-  for (auto i = 0; i < 50; ++i) {
+  for (auto i = 0; i < 200; ++i) {
     std::mt19937 rng(i);
 
     for (auto x = 0; x < MAX_EPOCHS; ++x) {
