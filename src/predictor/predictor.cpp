@@ -7,6 +7,7 @@
 #include "torch/torch.h"
 
 namespace nn = torch::nn;
+namespace optim = torch::optim;
 
 using torch::Tensor;
 
@@ -51,4 +52,8 @@ Tensor Predictor::Loss(const Tensor& output, const Tensor& target) {
   return criterion_(output, target).sqrt();
 }
 
-void Predictor::UpdateLR() { scheduler_.step(); }
+void Predictor::UpdateLR() {
+  auto options = static_cast<optim::AdamWOptions&>(optimizer_.defaults());
+  auto learning_rate = options.lr();
+  if (learning_rate > 1e-3) scheduler_.step();
+}

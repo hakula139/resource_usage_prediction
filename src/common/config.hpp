@@ -12,7 +12,7 @@ constexpr int64_t SEQ_LEN = 15;
 constexpr int64_t WINDOW_SIZE = 300;
 constexpr int64_t N_LAYERS = 1;
 constexpr double DROPOUT = 0.3;
-constexpr double LEARNING_RATE = 5e-3;
+constexpr double LEARNING_RATE = 1e-2;
 constexpr double LOSS_THRESHOLD = 0.1;
 
 constexpr int64_t DISPLAY_SIZE = 5000;

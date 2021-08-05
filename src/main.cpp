@@ -107,7 +107,7 @@ int main() {
       valid_loss_y.push_back(avg_loss);
     }
 
-    // predictor.UpdateLR();
+    predictor.UpdateLR();
 
     auto end_time = high_resolution_clock::now();
     auto time = duration<double, std::milli>(end_time - start_time).count();
