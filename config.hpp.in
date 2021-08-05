@@ -13,6 +13,7 @@ constexpr int64_t WINDOW_SIZE = @CONFIG_WINDOW_SIZE@;
 constexpr int64_t N_LAYERS = @CONFIG_N_LAYERS@;
 constexpr double DROPOUT = @CONFIG_DROPOUT@;
 constexpr double LEARNING_RATE = @CONFIG_LEARNING_RATE@;
+constexpr double MIN_LEARNING_RATE = @CONFIG_MIN_LEARNING_RATE@;
 constexpr double LOSS_THRESHOLD = @CONFIG_LOSS_THRESHOLD@;
 
 constexpr int64_t DISPLAY_SIZE = @CONFIG_DISPLAY_SIZE@;

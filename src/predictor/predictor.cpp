@@ -55,5 +55,8 @@ Tensor Predictor::Loss(const Tensor& output, const Tensor& target) {
 void Predictor::UpdateLR() {
   auto options = static_cast<optim::AdamWOptions&>(optimizer_.defaults());
   auto learning_rate = options.lr();
-  if (learning_rate > 1e-3) scheduler_.step();
+  // Update learning rate only when it's larger than MIN_LEARNING_RATE
+  if (learning_rate > MIN_LEARNING_RATE) {
+    scheduler_.step();
+  }
 }
