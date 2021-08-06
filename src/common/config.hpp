@@ -5,10 +5,10 @@
 
 // clang-format off
 
-constexpr int64_t HIDDEN_SIZE = 15;
+constexpr int64_t HIDDEN_SIZE = 10;
 constexpr int64_t OUTPUT_SIZE = 1;
 constexpr int64_t MAX_SIZE = 200;
-constexpr int64_t SEQ_LEN = 20;
+constexpr int64_t SEQ_LEN = 15;
 constexpr int64_t WINDOW_SIZE = 300;
 constexpr int64_t N_LAYERS = 1;
 constexpr double DROPOUT = 0.3;

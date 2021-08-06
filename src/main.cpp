@@ -4,6 +4,7 @@
 #include <fstream>
 #include <iostream>
 #include <numeric>
+#include <thread>  // NOLINT(build/c++11)
 #include <vector>
 
 #include "common/config.hpp"
@@ -143,6 +144,9 @@ int main() {
     std::cout << " \tTime: " << time << " ms" << std::endl;
 
     output_file << prediction << " ";
+
+    // Sleep for a while before reading next value
+    std::this_thread::sleep_for(std::chrono::milliseconds(50));
   }
 
   input_file.close();
