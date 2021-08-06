@@ -16,7 +16,7 @@ constexpr double LEARNING_RATE = @CONFIG_LEARNING_RATE@;
 constexpr double MIN_LEARNING_RATE = @CONFIG_MIN_LEARNING_RATE@;
 constexpr double LOSS_THRESHOLD = @CONFIG_LOSS_THRESHOLD@;
 
-constexpr int64_t DISPLAY_SIZE = @CONFIG_DISPLAY_SIZE@;
+constexpr int64_t PLOT_STEP = @CONFIG_PLOT_STEP@;
 constexpr const char* DATA_DIR = "@CONFIG_DATA_DIR@";
 constexpr const char* INPUT_PATH = "@CONFIG_INPUT_PATH@";
 constexpr const char* OUTPUT_PATH = "@CONFIG_OUTPUT_PATH@";

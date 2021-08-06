@@ -35,8 +35,9 @@ int main() {
 
   double total_time = 0.0, max_time = 0.0;
   int64_t time_count = 0;
-  double total_loss = 0.0, avg_loss = -1.0;
-  int64_t loss_count = 0;
+  double total_train_loss = 0.0, avg_train_loss = -1.0;
+  double total_valid_loss = 0.0, avg_valid_loss = -1.0;
+  int64_t train_loss_count = 0, valid_loss_count = 0;
 
   auto start_plotting = false;
 
@@ -63,16 +64,20 @@ int main() {
     auto train_loss = predictor.Train(data);
 
     // Waiting for an acceptable training loss
-    if (train_loss < 0) {
-      // Not training
-    } else if (train_loss < LOSS_THRESHOLD) {
+    if (train_loss >= 0 && train_loss < LOSS_THRESHOLD) {
       start_plotting = true;
     }
 
     if (start_plotting && train_loss >= 0) {
       train_loss *= MAX_SIZE;
-      train_loss_x.push_back(epoch);
-      train_loss_y.push_back(train_loss);
+      total_train_loss += train_loss;
+      ++train_loss_count;
+      avg_train_loss = total_train_loss / train_loss_count;
+
+      if (epoch % PLOT_STEP == 0) {
+        train_loss_x.push_back(epoch);
+        train_loss_y.push_back(avg_train_loss);
+      }
     }
 
     /* Validation */
@@ -100,11 +105,15 @@ int main() {
 
     if (start_plotting && valid_loss >= 0) {
       valid_loss *= MAX_SIZE;
-      total_loss += valid_loss;
-      ++loss_count;
-      avg_loss = total_loss / loss_count;
-      valid_loss_x.push_back(epoch + 1 - OUTPUT_SIZE);
-      valid_loss_y.push_back(avg_loss);
+      total_valid_loss += valid_loss;
+      ++valid_loss_count;
+      avg_valid_loss = total_valid_loss / valid_loss_count;
+
+      auto pred_epoch = epoch + 1 - OUTPUT_SIZE;
+      if (pred_epoch % PLOT_STEP == 0) {
+        valid_loss_x.push_back(pred_epoch);
+        valid_loss_y.push_back(avg_valid_loss);
+      }
     }
 
     predictor.UpdateLR();
@@ -120,18 +129,13 @@ int main() {
 
     std::cout << " \tLoss: " << std::fixed << std::setprecision(5)
               << std::right;
-    if (train_loss >= 0) {
-      std::cout << std::setw(8) << train_loss << " (train)";
+    if (avg_train_loss >= 0) {
+      std::cout << std::setw(8) << avg_train_loss << " (train avg)";
     } else {
-      std::cout << std::string(16, ' ');
+      std::cout << std::string(20, ' ');
     }
-    if (valid_loss >= 0) {
-      std::cout << " | " << std::setw(8) << valid_loss << " (valid)";
-    } else {
-      std::cout << std::string(19, ' ');
-    }
-    if (avg_loss >= 0) {
-      std::cout << " | " << std::setw(8) << avg_loss << " (valid avg)";
+    if (avg_valid_loss >= 0) {
+      std::cout << " | " << std::setw(8) << avg_valid_loss << " (valid avg)";
     } else {
       std::cout << std::string(23, ' ');
     }
@@ -146,7 +150,7 @@ int main() {
 
   auto avg_time = total_time / time_count;
   std::cout << "Loss: ";
-  std::cout << avg_loss << " (valid avg)\n";
+  std::cout << avg_valid_loss << " (valid avg)\n";
   std::cout << "Time: ";
   std::cout << avg_time << " ms (avg)";
   std::cout << " | " << max_time << " ms (max)" << std::endl;

@@ -1,5 +1,6 @@
 #include "utils.hpp"
 
+#include <algorithm>
 #include <tuple>
 
 #include "config.hpp"
@@ -9,7 +10,7 @@ sciplot::Plot NewPlot(size_t size) {
   sciplot::Plot plot;
 
   auto figure_size = [](size_t data_size) -> std::tuple<size_t, size_t> {
-    return {data_size << 2, 920ul};
+    return {std::max(data_size << 2, 1920ul), 920ul};
   };
   auto [width, height] = figure_size(size);
 
