@@ -19,6 +19,7 @@ int main() {
 
   for (auto i = 0; i < 200; ++i) {
     std::mt19937 rng(i);
+    auto bias = normal_dist(rng) * 10;
 
     for (auto x = 0; x < MAX_EPOCHS; ++x) {
       std::vector<double> data{
@@ -40,7 +41,7 @@ int main() {
           normal_dist(rng) * 3,
       };
 
-      auto sum = std::accumulate(data.begin(), data.end(), 0.0);
+      auto sum = std::accumulate(data.begin(), data.end(), bias);
       auto y = round(std::max(sum, 0.0));
       output_file << y << " ";
     }
