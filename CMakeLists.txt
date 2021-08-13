@@ -35,6 +35,8 @@ set(CONFIG_FIGURE_DIR "figures")
 set(CONFIG_PREDICTIONS_FIGURE_PATH "${CONFIG_FIGURE_DIR}/predictions.svg")
 set(CONFIG_LOSS_FIGURE_PATH "${CONFIG_FIGURE_DIR}/loss.svg")
 
+set(CONFIG_WAIT_TIME 200)
+
 configure_file("config.hpp.in" "${CMAKE_SOURCE_DIR}/src/common/config.hpp")
 
 add_subdirectory(src)

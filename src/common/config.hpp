@@ -24,6 +24,8 @@ constexpr const char* FIGURE_DIR = "figures";
 constexpr const char* PREDICTIONS_FIGURE_PATH = "figures/predictions.svg";
 constexpr const char* LOSS_FIGURE_PATH = "figures/loss.svg";
 
+constexpr int64_t WAIT_TIME = 200;
+
 // clang-format on
 
 #endif  // SRC_COMMON_CONFIG_HPP_

@@ -24,6 +24,8 @@ constexpr const char* FIGURE_DIR = "@CONFIG_FIGURE_DIR@";
 constexpr const char* PREDICTIONS_FIGURE_PATH = "@CONFIG_PREDICTIONS_FIGURE_PATH@";
 constexpr const char* LOSS_FIGURE_PATH = "@CONFIG_LOSS_FIGURE_PATH@";
 
+constexpr int64_t WAIT_TIME = @CONFIG_WAIT_TIME@;
+
 // clang-format on
 
 #endif  // SRC_COMMON_CONFIG_HPP_
