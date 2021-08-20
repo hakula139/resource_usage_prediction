@@ -21,6 +21,7 @@ constexpr double LOSS_THRESHOLD = 0.1;
 constexpr int64_t PLOT_STEP = 500;
 constexpr const char* DATA_PATH = "/home/hakula/Tencent/resource_usage_prediction/data";
 constexpr const char* INPUT_PATH = "/home/hakula/Tencent/resource_usage_prediction/data/input.txt";
+constexpr const char* OUTPUT_PATH = "/home/hakula/Tencent/resource_usage_prediction/data/output.txt";
 constexpr const char* FIGURE_PATH = "/home/hakula/Tencent/resource_usage_prediction/figures";
 constexpr const char* LOG_PATH = "/home/hakula/Tencent/resource_usage_prediction/logs";
 

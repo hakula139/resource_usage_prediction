@@ -21,6 +21,7 @@ constexpr double LOSS_THRESHOLD = @CONFIG_LOSS_THRESHOLD@;
 constexpr int64_t PLOT_STEP = @CONFIG_PLOT_STEP@;
 constexpr const char* DATA_PATH = "@CONFIG_DATA_PATH@";
 constexpr const char* INPUT_PATH = "@CONFIG_INPUT_PATH@";
+constexpr const char* OUTPUT_PATH = "@CONFIG_OUTPUT_PATH@";
 constexpr const char* FIGURE_PATH = "@CONFIG_FIGURE_PATH@";
 constexpr const char* LOG_PATH = "@CONFIG_LOG_PATH@";
 

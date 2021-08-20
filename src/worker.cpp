@@ -59,7 +59,7 @@ Worker::~Worker() {
 #endif
 }
 
-void Worker::Insert(const value_t& value) {
+void Worker::Insert(value_t value) {
 #if VERBOSE
   auto start_time = high_resolution_clock::now();
 #endif
