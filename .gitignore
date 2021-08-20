@@ -4,7 +4,9 @@ bin/
 build/
 data/
 figures/
-
+logs/
+*.log
+config.hpp
 
 ## Cpp
 

@@ -14,12 +14,12 @@ namespace fs = std::filesystem;
 int main() {
   std::normal_distribution<double> normal_dist(0.0);
 
-  fs::create_directories(DATA_DIR);
+  fs::create_directories(DATA_PATH);
   std::ofstream output_file(OUTPUT_PATH);
 
   for (auto i = 0; i < 200; ++i) {
     std::mt19937 rng(i);
-    auto bias = normal_dist(rng) * 10;
+    // auto bias = normal_dist(rng) * 10;
 
     for (auto x = 0; x < MAX_EPOCHS; ++x) {
       std::vector<double> data{
@@ -41,11 +41,14 @@ int main() {
           normal_dist(rng) * 3,
       };
 
-      auto sum = std::accumulate(data.begin(), data.end(), bias);
-      auto y = round(std::max(sum, 0.0));
-      output_file << y << " ";
+      auto sum = std::accumulate(data.begin(), data.end(), 0);
+      auto y = std::max(sum, 0.0);
+
+      for (auto j = 1; j <= 5; ++j) {
+        output_file << j << " " << round(y * j) << "\n";
+      }
     }
-    output_file << std::endl;
   }
-  output_file << -1 << std::endl;
+
+  output_file << END_MARK << std::endl;
 }

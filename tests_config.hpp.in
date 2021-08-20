@@ -1,0 +1,17 @@
+#ifndef TESTS_COMMON_CONFIG_HPP_
+#define TESTS_COMMON_CONFIG_HPP_
+
+#include <cstdint>
+
+// clang-format off
+
+constexpr int64_t MAX_EPOCHS = @CONFIG_MAX_EPOCHS@;
+
+constexpr const char* DATA_PATH = "@CONFIG_DATA_PATH@";
+constexpr const char* OUTPUT_PATH = "@CONFIG_INPUT_PATH@";
+
+constexpr const char* END_MARK = "@CONFIG_END_MARK@";
+
+// clang-format on
+
+#endif  // TESTS_COMMON_CONFIG_HPP_
