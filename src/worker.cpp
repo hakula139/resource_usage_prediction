@@ -33,8 +33,8 @@ Worker::~Worker() {
   /* Logging */
 
   log_file_ << "\nLoss: ";
-  log_file_ << std::setw(8) << avg_train_loss_ << " (train avg)";
-  log_file_ << " | " << std::setw(8) << avg_valid_loss_ << " (valid avg)";
+  log_file_ << avg_train_loss_ << " (train avg)";
+  log_file_ << " | " << avg_valid_loss_ << " (valid avg)";
 
   log_file_ << "\nTime: ";
   log_file_ << avg_time_ << " ms (avg)";

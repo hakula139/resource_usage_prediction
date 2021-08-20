@@ -41,7 +41,7 @@ int main() {
           normal_dist(rng) * 3,
       };
 
-      auto sum = std::accumulate(data.begin(), data.end(), 0);
+      auto sum = std::accumulate(data.begin(), data.end(), 0.0);
       auto y = std::max(sum, 0.0);
 
       for (auto j = 1; j <= 5; ++j) {
