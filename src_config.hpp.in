@@ -5,7 +5,7 @@
 
 // clang-format off
 
-#define VERBOSE @CONFIG_DEBUG@
+#define VERBOSE @CONFIG_VERBOSE@
 
 constexpr int64_t HIDDEN_SIZE = @CONFIG_HIDDEN_SIZE@;
 constexpr int64_t OUTPUT_SIZE = @CONFIG_OUTPUT_SIZE@;

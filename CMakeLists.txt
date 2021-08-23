@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
 project(resource_usage_prediction VERSION 0.1)
 
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_BUILD_TYPE "Debug")
+set(CMAKE_BUILD_TYPE "Release")
 set(CMAKE_CXX_FLAGS "-Wall ${TORCH_CXX_FLAGS}")
 set(CMAKE_CXX_FLAGS_DEBUG "-g -O0")
 set(CMAKE_CXX_FLAGS_RELEASE "-Ofast")
@@ -16,11 +16,7 @@ find_package(sciplot REQUIRED)
 
 # Parameters
 
-if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-  set(CONFIG_DEBUG 1)
-else()
-  set(CONFIG_DEBUG 0)
-endif()
+set(CONFIG_VERBOSE 1)
 
 set(CONFIG_HIDDEN_SIZE 10)
 set(CONFIG_OUTPUT_SIZE 1)
@@ -43,7 +39,11 @@ set(CONFIG_LOG_PATH "${PROJECT_SOURCE_DIR}/logs")
 set(CONFIG_WAIT_TIME 200)
 set(CONFIG_END_MARK "__END__")
 
+set(CONFIG_REPEAT_TIMES 200)
 set(CONFIG_MAX_EPOCHS 240)
+set(CONFIG_INSTANCE_SIZE 10)
+set(CONFIG_NOISE_SIZE 3)
+set(CONFIG_BIAS_SIZE 0)
 
 configure_file("src_config.hpp.in" "${PROJECT_SOURCE_DIR}/src/common/config.hpp")
 configure_file("tests_config.hpp.in" "${PROJECT_SOURCE_DIR}/tests/common/config.hpp")

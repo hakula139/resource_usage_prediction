@@ -38,15 +38,27 @@ std::future<value_t> FeedNewData(const std::string& key, value_t value) {
   return prediction;
 }
 
+// On caller side, do something with the returned promise like this
+void Consume(const std::string& key, std::future<value_t>&& prediction) {
+  auto routine = [](const std::string& key, std::future<value_t>&& prediction) {
+    static std::ofstream output_file(OUTPUT_PATH);
+    output_file << key << " " << prediction.get() << std::endl;
+  };
+
+  auto done = std::async(
+      std::launch::async, routine, key, std::move(prediction));
+}
+
 int main() {
+  std::ios::sync_with_stdio(false);
+  std::cin.tie(nullptr);
+
 #if VERBOSE
   std::cout << "Server started.\n";
   auto start_time = high_resolution_clock::now();
 #endif
 
   std::ifstream input_file(INPUT_PATH);
-  std::ofstream output_file(OUTPUT_PATH);
-
   while (!input_file.eof()) {
     std::string key;
     value_t value;
@@ -55,13 +67,7 @@ int main() {
 
     auto prediction = FeedNewData(key, value);
 
-    auto consume = [&output_file](
-                       const std::string& key,
-                       std::future<value_t>&& prediction) {
-      // On caller side, do something with the returned promise like this
-      output_file << key << " " << prediction.get() << std::endl;
-    };
-    consume(key, std::move(prediction));
+    // Consume(key, std::move(prediction));
 
     // Sleep for a while before reading next value
     // std::this_thread::sleep_for(std::chrono::milliseconds(WAIT_TIME));

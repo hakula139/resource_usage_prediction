@@ -169,6 +169,6 @@ void Worker::Insert(value_t value) {
     log_file_ << std::string(23, ' ');
   }
 
-  log_file_ << " \tTime: " << time << " ms\n";
+  log_file_ << " \tTime: " << time << " ms" << std::endl;
 #endif
 }
