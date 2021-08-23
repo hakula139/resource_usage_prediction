@@ -5,7 +5,11 @@
 
 // clang-format off
 
+constexpr int64_t REPEAT_TIMES = @CONFIG_REPEAT_TIMES@;
 constexpr int64_t MAX_EPOCHS = @CONFIG_MAX_EPOCHS@;
+constexpr int64_t INSTANCE_SIZE = @CONFIG_INSTANCE_SIZE@;
+constexpr double NOISE_SIZE = @CONFIG_NOISE_SIZE@;
+constexpr double BIAS_SIZE = @CONFIG_BIAS_SIZE@;
 
 constexpr const char* DATA_PATH = "@CONFIG_DATA_PATH@";
 constexpr const char* OUTPUT_PATH = "@CONFIG_INPUT_PATH@";

@@ -17,9 +17,9 @@ int main() {
   fs::create_directories(DATA_PATH);
   std::ofstream output_file(OUTPUT_PATH);
 
-  for (auto i = 0; i < 200; ++i) {
+  for (auto i = 0; i < REPEAT_TIMES; ++i) {
     std::mt19937 rng(i);
-    // auto bias = normal_dist(rng) * 10;
+    auto bias = normal_dist(rng) * BIAS_SIZE;
 
     for (auto x = 0; x < MAX_EPOCHS; ++x) {
       std::vector<double> data{
@@ -38,14 +38,14 @@ int main() {
           NormalPdf(x, 220, 10) * 3000,
 
           // Random noise
-          normal_dist(rng) * 3,
+          normal_dist(rng) * NOISE_SIZE,
       };
 
-      auto sum = std::accumulate(data.begin(), data.end(), 0.0);
-      auto y = std::max(sum, 0.0);
+      auto sum = std::accumulate(data.begin(), data.end(), bias);
 
-      for (auto j = 1; j <= 5; ++j) {
-        output_file << j << " " << round(y * j) << "\n";
+      for (auto j = 0; j < INSTANCE_SIZE; ++j) {
+        int64_t y = round(std::max(sum + j, 0.0));
+        output_file << j << " " << y << "\n";
       }
     }
   }
