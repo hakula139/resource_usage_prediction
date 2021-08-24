@@ -5,6 +5,9 @@
 
 // clang-format off
 
+#define VERBOSE @CONFIG_VERBOSE@
+constexpr int64_t MAX_N_THREADS = @CONFIG_MAX_N_THREADS@;
+
 constexpr int64_t HIDDEN_SIZE = @CONFIG_HIDDEN_SIZE@;
 constexpr int64_t OUTPUT_SIZE = @CONFIG_OUTPUT_SIZE@;
 constexpr int64_t MAX_SIZE = @CONFIG_MAX_SIZE@;
@@ -17,14 +20,14 @@ constexpr double MIN_LEARNING_RATE = @CONFIG_MIN_LEARNING_RATE@;
 constexpr double LOSS_THRESHOLD = @CONFIG_LOSS_THRESHOLD@;
 
 constexpr int64_t PLOT_STEP = @CONFIG_PLOT_STEP@;
-constexpr const char* DATA_DIR = "@CONFIG_DATA_DIR@";
+constexpr const char* DATA_PATH = "@CONFIG_DATA_PATH@";
 constexpr const char* INPUT_PATH = "@CONFIG_INPUT_PATH@";
 constexpr const char* OUTPUT_PATH = "@CONFIG_OUTPUT_PATH@";
-constexpr const char* FIGURE_DIR = "@CONFIG_FIGURE_DIR@";
-constexpr const char* PREDICTIONS_FIGURE_PATH = "@CONFIG_PREDICTIONS_FIGURE_PATH@";
-constexpr const char* LOSS_FIGURE_PATH = "@CONFIG_LOSS_FIGURE_PATH@";
+constexpr const char* FIGURE_PATH = "@CONFIG_FIGURE_PATH@";
+constexpr const char* LOG_PATH = "@CONFIG_LOG_PATH@";
 
 constexpr int64_t WAIT_TIME = @CONFIG_WAIT_TIME@;
+constexpr const char* END_MARK = "@CONFIG_END_MARK@";
 
 // clang-format on
 

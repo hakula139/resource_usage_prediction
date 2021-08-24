@@ -4,7 +4,8 @@ bin/
 build/
 data/
 figures/
-
+logs/
+*.log
 
 ## Cpp
 

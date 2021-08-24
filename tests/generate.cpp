@@ -14,12 +14,12 @@ namespace fs = std::filesystem;
 int main() {
   std::normal_distribution<double> normal_dist(0.0);
 
-  fs::create_directories(DATA_DIR);
+  fs::create_directories(DATA_PATH);
   std::ofstream output_file(OUTPUT_PATH);
 
-  for (auto i = 0; i < 200; ++i) {
+  for (auto i = 0; i < REPEAT_TIMES; ++i) {
     std::mt19937 rng(i);
-    auto bias = normal_dist(rng) * 10;
+    auto bias = normal_dist(rng) * BIAS_SIZE;
 
     for (auto x = 0; x < MAX_EPOCHS; ++x) {
       std::vector<double> data{
@@ -38,14 +38,17 @@ int main() {
           NormalPdf(x, 220, 10) * 3000,
 
           // Random noise
-          normal_dist(rng) * 3,
+          normal_dist(rng) * NOISE_SIZE,
       };
 
       auto sum = std::accumulate(data.begin(), data.end(), bias);
-      auto y = round(std::max(sum, 0.0));
-      output_file << y << " ";
+
+      for (auto j = 0; j < INSTANCE_SIZE; ++j) {
+        int64_t y = round(std::max(sum + j, 0.0));
+        output_file << "MAP_" << j << " " << y << "\n";
+      }
     }
-    output_file << std::endl;
   }
-  output_file << -1 << std::endl;
+
+  output_file << END_MARK << "\n";
 }

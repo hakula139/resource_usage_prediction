@@ -15,8 +15,7 @@ GruNet::GruNet(
       n_layers_(n_layers),
       encoder_(nn::GRUOptions(1, hidden_size)
                    .num_layers(n_layers)
-                   .batch_first(true)
-                   .dropout(dropout)),
+                   .batch_first(true)),
       decoder_(nn::GRUCellOptions(1, hidden_size)),
       fc_(nn::LinearOptions(hidden_size, 1)),
       relu_(),

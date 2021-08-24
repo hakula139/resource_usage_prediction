@@ -16,9 +16,11 @@ find_package(sciplot REQUIRED)
 
 # Parameters
 
+set(CONFIG_VERBOSE 0)
+
 set(CONFIG_HIDDEN_SIZE 10)
 set(CONFIG_OUTPUT_SIZE 1)
-set(CONFIG_MAX_SIZE 200)
+set(CONFIG_MAX_SIZE 1000)
 set(CONFIG_SEQ_LEN 15)
 set(CONFIG_WINDOW_SIZE 300)
 set(CONFIG_N_LAYERS 1)
@@ -28,16 +30,24 @@ set(CONFIG_MIN_LEARNING_RATE 1e-3)
 set(CONFIG_LOSS_THRESHOLD 0.1)
 
 set(CONFIG_PLOT_STEP 500)
-set(CONFIG_DATA_DIR "data")
-set(CONFIG_INPUT_PATH "${CONFIG_DATA_DIR}/input.txt")
-set(CONFIG_OUTPUT_PATH "${CONFIG_DATA_DIR}/output.txt")
-set(CONFIG_FIGURE_DIR "figures")
-set(CONFIG_PREDICTIONS_FIGURE_PATH "${CONFIG_FIGURE_DIR}/predictions.svg")
-set(CONFIG_LOSS_FIGURE_PATH "${CONFIG_FIGURE_DIR}/loss.svg")
+set(CONFIG_DATA_PATH "${PROJECT_SOURCE_DIR}/data")
+set(CONFIG_INPUT_PATH "${CONFIG_DATA_PATH}/input.txt")
+set(CONFIG_OUTPUT_PATH "${CONFIG_DATA_PATH}/output.txt")
+set(CONFIG_FIGURE_PATH "${PROJECT_SOURCE_DIR}/figures")
+set(CONFIG_LOG_PATH "${PROJECT_SOURCE_DIR}/logs")
 
-set(CONFIG_WAIT_TIME 200)
+set(CONFIG_WAIT_TIME 10)
+set(CONFIG_MAX_N_THREADS 20)
+set(CONFIG_END_MARK "__END__")
 
-configure_file("config.hpp.in" "${CMAKE_SOURCE_DIR}/src/common/config.hpp")
+set(CONFIG_REPEAT_TIMES 200)
+set(CONFIG_MAX_EPOCHS 240)
+set(CONFIG_INSTANCE_SIZE 100)
+set(CONFIG_NOISE_SIZE 3)
+set(CONFIG_BIAS_SIZE 0)
+
+configure_file("src_config.hpp.in" "${PROJECT_SOURCE_DIR}/src/common/config.hpp")
+configure_file("tests_config.hpp.in" "${PROJECT_SOURCE_DIR}/tests/common/config.hpp")
 
 add_subdirectory(src)
 add_subdirectory(tests)

@@ -1,10 +1,12 @@
 #include "utils.hpp"
 
 #include <algorithm>
+#include <string>
 #include <tuple>
 
 #include "config.hpp"
 #include "sciplot/sciplot.hpp"
+#include "types.hpp"
 
 sciplot::Plot NewPlot(size_t size) {
   sciplot::Plot plot;
@@ -24,19 +26,21 @@ sciplot::Plot NewPlot(size_t size) {
 }
 
 void PlotPredictions(
+    const std::string& figure_path,
     const std::vector<int64_t>& x1,
-    const std::vector<int64_t>& y1,
+    const std::vector<value_t>& y1,
     const std::vector<int64_t>& x2,
-    const std::vector<int64_t>& y2) {
+    const std::vector<value_t>& y2) {
   auto plot = NewPlot(x1.size());
   plot.xlabel("Epoch");
   plot.ylabel("Value");
   plot.drawCurve(x1, y1).label("Expected");
   plot.drawCurve(x2, y2).label("Predictions");
-  plot.save(PREDICTIONS_FIGURE_PATH);
+  plot.save(figure_path);
 }
 
 void PlotLoss(
+    const std::string& figure_path,
     const std::vector<int64_t>& x1,
     const std::vector<double>& y1,
     const std::vector<int64_t>& x2,
@@ -46,5 +50,5 @@ void PlotLoss(
   plot.ylabel("Loss");
   plot.drawCurve(x1, y1).label("Training loss");
   plot.drawCurve(x2, y2).label("Validation loss (average)");
-  plot.save(LOSS_FIGURE_PATH);
+  plot.save(figure_path);
 }
