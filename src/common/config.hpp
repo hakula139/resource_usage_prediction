@@ -5,8 +5,8 @@
 
 // clang-format off
 
-#define VERBOSE 1
-constexpr int64_t MAX_N_THREADS = 10;
+#define VERBOSE 0
+constexpr int64_t MAX_N_THREADS = 20;
 
 constexpr int64_t HIDDEN_SIZE = 10;
 constexpr int64_t OUTPUT_SIZE = 1;
@@ -26,7 +26,7 @@ constexpr const char* OUTPUT_PATH = "/home/hakula/Tencent/resource_usage_predict
 constexpr const char* FIGURE_PATH = "/home/hakula/Tencent/resource_usage_prediction/figures";
 constexpr const char* LOG_PATH = "/home/hakula/Tencent/resource_usage_prediction/logs";
 
-constexpr int64_t WAIT_TIME = 1;
+constexpr int64_t WAIT_TIME = 10;
 constexpr const char* END_MARK = "__END__";
 
 // clang-format on
