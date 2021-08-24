@@ -62,7 +62,7 @@ void Consume(const std::string& key, value_t value) {
 
     {
       std::unique_lock<std::mutex> guard(n_threads_lk);
-      std::cout << " | Threads: " << n_threads << "\n";
+      std::cout << " | Threads: " << n_threads << std::endl;
       --n_threads;
     }
     // Unblock the producer thread.
