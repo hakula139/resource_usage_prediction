@@ -7,7 +7,7 @@
 
 constexpr int64_t REPEAT_TIMES = 200;
 constexpr int64_t MAX_EPOCHS = 240;
-constexpr int64_t INSTANCE_SIZE = 10;
+constexpr int64_t INSTANCE_SIZE = 50;
 constexpr double NOISE_SIZE = 3;
 constexpr double BIAS_SIZE = 0;
 

@@ -1,7 +1,7 @@
 #include "worker.hpp"
 
 #include <algorithm>
-#include <chrono>  // NOLINT(build/c++11)
+#include <chrono>
 #include <filesystem>
 #include <fstream>
 #include <string>
@@ -169,6 +169,6 @@ void Worker::Insert(value_t value) {
     log_file_ << std::string(23, ' ');
   }
 
-  log_file_ << " \tTime: " << time << " ms" << std::endl;
+  log_file_ << " \tTime: " << time << " ms\n";
 #endif
 }

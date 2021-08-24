@@ -2,7 +2,7 @@
 #define SRC_WORKER_HPP_
 
 #include <filesystem>
-#include <mutex>  // NOLINT(build/c++11)
+#include <mutex>
 #include <string>
 #include <vector>
 
@@ -17,8 +17,7 @@ class Worker {
   void Insert(value_t value);
   value_t prediction() const { return prediction_; }
 
-  void Lock() { mutex_.lock(); }
-  void Unlock() { mutex_.unlock(); }
+  std::mutex& mutex() { return mutex_; }
 
  private:
   const std::string key_;
@@ -26,7 +25,7 @@ class Worker {
 
   std::vector<value_t> dataset_;
   Predictor predictor_;
-  value_t prediction_ = 0;
+  value_t prediction_ = -1;
 
 #if VERBOSE
 

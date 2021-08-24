@@ -45,10 +45,10 @@ int main() {
 
       for (auto j = 0; j < INSTANCE_SIZE; ++j) {
         int64_t y = round(std::max(sum + j, 0.0));
-        output_file << j << " " << y << "\n";
+        output_file << "MAP_" << j << " " << y << "\n";
       }
     }
   }
 
-  output_file << END_MARK << std::endl;
+  output_file << END_MARK << "\n";
 }

@@ -1,11 +1,15 @@
-#include <chrono>  // NOLINT(build/c++11)
+#include <atomic>
+#include <chrono>
+#include <condition_variable>
 #include <fstream>
-#include <future>  // NOLINT(build/c++11)
+#include <future>
 #include <iostream>
+#include <mutex>
 #include <string>
-#include <thread>  // NOLINT(build/c++11)
+#include <thread>
 #include <tuple>
 #include <unordered_map>
+#include <vector>
 
 #include "common/config.hpp"
 #include "common/types.hpp"
@@ -14,69 +18,87 @@
 using std::chrono::duration;
 using std::chrono::high_resolution_clock;
 
-// Feed the latest data and get the prediction for the next value
-std::future<value_t> FeedNewData(const std::string& key, value_t value) {
-  static std::unordered_map<std::string, std::unique_ptr<Worker>> workers;
+std::unordered_map<std::string, std::unique_ptr<Worker>> workers;
+std::mutex workers_lk;
 
-  if (!workers.count(key)) {
-    workers[key] = std::make_unique<Worker>(key);
+std::atomic_int64_t n_threads = 0;
+std::mutex n_threads_lk;
+std::condition_variable n_threads_cv;
+
+// Feed the latest data and get a prediction for the next value.
+value_t Feed(const std::string& key, value_t value) {
+  {
+    // Prevent conflicts when creating a new worker.
+    std::unique_lock<std::mutex> guard{workers_lk};
+
+    if (!workers.count(key)) {
+      workers[key] = std::make_unique<Worker>(key);
+    }
   }
+
   const auto& worker = workers.at(key);
 
-  auto routine = [&worker](value_t value) {
-    worker->Insert(value);
-    return worker->prediction();
-  };
-
   // The training procedure must not be interrupted. All values should be
-  // handled in chronological order.
-  worker->Lock();
-  // Asynchronous worker returns a promise
-  auto prediction = std::async(std::launch::async, routine, value);
-  worker->Unlock();
+  // processed in chronological order.
+  std::unique_lock<std::mutex> guard{worker->mutex()};
 
-  return prediction;
+  worker->Insert(value);
+  return worker->prediction();
 }
 
-// On caller side, do something with the returned promise like this
-void Consume(const std::string& key, std::future<value_t>&& prediction) {
-  auto routine = [](const std::string& key, std::future<value_t>&& prediction) {
-    static std::ofstream output_file(OUTPUT_PATH);
-    output_file << key << " " << prediction.get() << std::endl;
+// An example for caller side.
+void Consume(const std::string& key, value_t value) {
+  auto start_time = high_resolution_clock::now();
+
+  auto routine = [start_time](const std::string& key, value_t value) {
+    auto prediction = Feed(key, value);
+
+    auto end_time = high_resolution_clock::now();
+    auto time = duration<double, std::milli>(end_time - start_time).count();
+
+    std::cout << key << " " << prediction;
+    std::cout << " \tTime: " << std::fixed << std::setprecision(4)
+              << std::setw(7) << time << " ms";
+
+    {
+      std::unique_lock<std::mutex> guard(n_threads_lk);
+      std::cout << " | Threads: " << n_threads << "\n";
+      --n_threads;
+    }
+    // Unblock the producer thread.
+    n_threads_cv.notify_one();
   };
 
-  auto done = std::async(
-      std::launch::async, routine, key, std::move(prediction));
+  std::thread consumer{routine, key, value};
+  consumer.detach();
 }
 
 int main() {
   std::ios::sync_with_stdio(false);
   std::cin.tie(nullptr);
 
-#if VERBOSE
   std::cout << "Server started.\n";
-  auto start_time = high_resolution_clock::now();
-#endif
 
   std::ifstream input_file(INPUT_PATH);
+
   while (!input_file.eof()) {
     std::string key;
     value_t value;
     input_file >> key >> value;
     if (key == END_MARK) break;
 
-    auto prediction = FeedNewData(key, value);
+    {
+      // Limit the number of running threads.
+      std::unique_lock<std::mutex> guard(n_threads_lk);
+      n_threads_cv.wait(guard, [] { return n_threads < MAX_N_THREADS; });
+      ++n_threads;
+    }
 
-    // Consume(key, std::move(prediction));
+    Consume(key, value);
 
-    // Sleep for a while before reading next value
-    // std::this_thread::sleep_for(std::chrono::milliseconds(WAIT_TIME));
+    // Sleep for a while before reading next value.
+    std::this_thread::sleep_for(std::chrono::milliseconds(WAIT_TIME));
   }
-  input_file.close();
 
-#if VERBOSE
-  auto end_time = high_resolution_clock::now();
-  auto time = duration<double, std::milli>(end_time - start_time).count();
-  std::cout << "Time: " << time << " ms\n";
-#endif
+  input_file.close();
 }
